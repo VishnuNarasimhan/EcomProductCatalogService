@@ -19,7 +19,7 @@ public class ProductController {
     AuthenticationCommons authenticationCommons;
     RestTemplate restTemplate;
 
-    ProductController(@Qualifier("FakeStoreProductService") ProductService productService, AuthenticationCommons authenticationCommons, RestTemplate restTemplate) {
+    ProductController(@Qualifier("SelfStoreProductService") ProductService productService, AuthenticationCommons authenticationCommons, RestTemplate restTemplate) {
         this.authenticationCommons = authenticationCommons;
         this.productService = productService;
         this.restTemplate = restTemplate;
@@ -35,10 +35,11 @@ public class ProductController {
     @GetMapping("/{productId}")
     public Product getProductById(@PathVariable("productId") Long productId) {
 
-//        ResponseEntity<String> responseEntity = restTemplate.getForEntity(
-//                "http://UserManagementService/users/10", String.class
-//        );
-        System.out.println("Request is received through API gateway");
+        // Code for Client based load balancing...
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(
+                "http://UserManagementService/users/10", String.class
+        );
+//        System.out.println("Request is received through API gateway");
         return productService.getProductById(productId);
     }
 //
